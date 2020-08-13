@@ -1,0 +1,174 @@
+<!--  type="company"
+block="block/FS_UartServo.js"
+generator="generator/FS_UartServo.js"
+language="language/FS_UartServo"
+lib="FashionStar_UartServo"
+media="media/FS_UartServo" -->
+
+<script src="../../blocks/company/FS_UartServo.js"></script>
+<script src="../../generators/arduino/company/FS_UartServo.js"></script>
+
+<category id="fsus" name="FS串行总线舵机" colour="300">
+  <block type="fsus_begin"></block>
+
+  <block type="fsus_begin2">
+    <value name="SERVO_ID0">
+      <block type="math_number">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+  </block>
+
+  <!-- 舵机 ID [0] 是否在线 -->
+  <block type="fsus_ping">
+    <value name="SERVO_ID">
+      <shadow type="math_number">
+        <field name="NUM">0</field>
+      </shadow>
+    </value>
+  </block>
+
+  <!-- ID [0] 角度 [angle] 转速 [100] 度/秒 [是否等待] -->
+  <block type="fsus_set_angle">
+    <value name="SERVO_ID">
+      <shadow type="math_number">
+        <field name="NUM">0</field>
+      </shadow>
+    </value>
+    <value name="SERVO_ANGLE">
+      <shadow type="math_number">
+        <field name="NUM">60</field>
+      </shadow>
+    </value>
+    <value name="SERVO_SPEED">
+      <shadow type="math_number">
+        <field name="NUM">100</field>
+      </shadow>
+    </value>
+  </block>
+
+  <!-- 舵机 ID [0] 读取 [角度类型] -->
+  <block type="fsus_read_angle">
+    <value name="SERVO_ID">
+      <shadow type="math_number">
+        <field name="NUM">0</field>
+      </shadow>
+    </value>
+  </block>
+
+  <block type="fsus_wheel_stop">
+    <value name="SERVO_ID">
+      <shadow type="math_number">
+        <field name="NUM">0</field>
+      </shadow>
+    </value>
+  </block>
+
+  <!-- 轮式模式 舵机 ID [0] 转速 [100] °/s 转向 [转向选择] -->
+  <block type="fsus_wheel_run">
+    <value name="SERVO_ID">
+      <shadow type="math_number">
+        <field name="NUM">0</field>
+      </shadow>
+    </value>
+    <value name="SERVO_SPEED">
+      <shadow type="math_number">
+        <field name="NUM">100</field>
+      </shadow>
+    </value>
+  </block>
+
+  <!-- 轮式模式 舵机 ID [0] 转速 [100] °/s 转向 [转向选择] 时间 [1000] 毫秒 -->
+  <block type="fsus_wheel_run_time">
+    <value name="SERVO_ID">
+      <shadow type="math_number">
+        <field name="NUM">0</field>
+      </shadow>
+    </value>
+    <value name="SERVO_SPEED">
+      <shadow type="math_number">
+        <field name="NUM">100</field>
+      </shadow>
+    </value>
+    <value name="TIME_MS">
+      <shadow type="math_number">
+        <field name="NUM">1000</field>
+      </shadow>
+    </value>
+  </block>
+
+  <!-- 轮式模式 舵机 ID [0] 转速 [100] °/s 转向 [转向选择] 圈数 [2] -->
+  <block type="fsus_wheel_run_circle">
+    <value name="SERVO_ID">
+      <shadow type="math_number">
+        <field name="NUM">0</field>
+      </shadow>
+    </value>
+    <value name="SERVO_SPEED">
+      <shadow type="math_number">
+        <field name="NUM">100</field>
+      </shadow>
+    </value>
+    <value name="CIRCLE">
+      <shadow type="math_number">
+        <field name="NUM">2</field>
+      </shadow>
+    </value>
+  </block>
+
+  <!-- 舵机 ID [0] 设置角度范围 最小 [minAngle] ° 最大 [maxAngle] ° -->
+  <block type="fsus_set_angle_range">
+    <value name="SERVO_ID">
+      <shadow type="math_number">
+        <field name="NUM">0</field>
+      </shadow>
+    </value>
+    <value name="SERVO_ANGLE_MIN">
+      <shadow type="math_number">
+        <field name="NUM">-90</field>
+      </shadow>
+    </value>
+    <value name="SERVO_ANGLE_MAX">
+      <shadow type="math_number">
+        <field name="NUM">90</field>
+      </shadow>
+    </value>
+  </block>
+
+  <!-- 舵机 ID [0] 设置转速 [speed] 度/秒 -->
+  <block type="fsus_set_speed">
+    <value name="SERVO_ID">
+      <shadow type="math_number">
+        <field name="NUM">0</field>
+      </shadow>
+    </value>
+    <value name="SERVO_SPEED">
+      <shadow type="math_number">
+        <field name="NUM">100</field>
+      </shadow>
+    </value>
+  </block>
+
+  <!-- 舵机 ID [0] [开启或关闭选择] 扭力 -->
+  <block type="fsus_set_torque">
+    <value name="SERVO_ID">
+      <shadow type="math_number">
+        <field name="NUM">0</field>
+      </shadow>
+    </value>
+  </block>
+
+  <!-- 舵机 ID [0]  设置阻尼 功率 [800] mW -->
+  <block type="fsus_set_damping">
+    <value name="SERVO_ID">
+      <shadow type="math_number">
+        <field name="NUM">0</field>
+      </shadow>
+    </value>
+    <value name="SERVO_DAMPING">
+      <shadow type="math_number">
+        <field name="NUM">800</field>
+      </shadow>
+    </value>
+  </block>
+</category>
