@@ -76,10 +76,6 @@ Blockly.Blocks["fsus_begin"] = {
 };
 
 Blockly.Blocks["servos_create_with_item"] = {
-  /**
-   * Mutator bolck for adding items.
-   * @this Blockly.Block
-   */
   init: function () {
     this.setColour(Blockly.Blocks.fsus.HUE);
     this.appendDummyInput().appendField("servo");
@@ -90,10 +86,6 @@ Blockly.Blocks["servos_create_with_item"] = {
 };
 
 Blockly.Blocks["servos_create_with_container"] = {
-  /**
-   * Mutator block for list container.
-   * @this Blockly.Block
-   */
   init: function () {
     this.setColour(Blockly.Blocks.fsus.HUE);
     this.appendDummyInput().appendField(Blockly.FSUS_SERVOS);
@@ -141,11 +133,6 @@ Blockly.Blocks["fsus_begin2"] = {
     }
   },
 
-  /**
-   * Create XML to represent list inputs.
-   * @return {Element} XML storage element.
-   * @this Blockly.Block
-   */
   mutationToDom: function () {
     var container = document.createElement("mutation");
     container.setAttribute("items", this.itemCount_);
@@ -154,11 +141,6 @@ Blockly.Blocks["fsus_begin2"] = {
     return container;
   },
 
-  /**
-   * Parse XML to restore the list inputs.
-   * @param {!Element} xmlElement XML storage element.
-   * @this Blockly.Block
-   */
   domToMutation: function (xmlElement) {
     this.itemCount_ = parseInt(xmlElement.getAttribute("items"), 10);
     var serialName = xmlElement.getAttribute("serialname");
@@ -169,12 +151,6 @@ Blockly.Blocks["fsus_begin2"] = {
     this.updateShape_();
   },
 
-  /**
-   * Populate the mutator's dialog with this block's components.
-   * @param {!Blockly.Workspace} workspace Mutator's workspace.
-   * @return {!Blockly.Block} Root block in mutator.
-   * @this Blockly.Block
-   */
   decompose: function (workspace) {
     var containerBlock = Blockly.Block.obtain(
       workspace,
@@ -194,11 +170,6 @@ Blockly.Blocks["fsus_begin2"] = {
     return containerBlock;
   },
 
-  /**
-   * Reconfigure this block based on the mutator dialog's components.
-   * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this Blockly.Block
-   */
   compose: function (containerBlock) {
     var itemBlock = containerBlock.getInputTargetBlock("STACK");
     // Count number of inputs.
@@ -220,11 +191,6 @@ Blockly.Blocks["fsus_begin2"] = {
     }
   },
 
-  /**
-   * Store pointers to any connected child blocks.
-   * @param {!Blockly.Block} containerBlock Root block in mutator.
-   * @this Blockly.Block
-   */
   saveConnections: function (containerBlock) {
     var itemBlock = containerBlock.getInputTargetBlock("STACK");
     var i = 0;
@@ -237,11 +203,6 @@ Blockly.Blocks["fsus_begin2"] = {
     }
   },
 
-  /**
-   * Modify this block to have the correct number of inputs.
-   * @private
-   * @this Blockly.Block
-   */
   updateShape_: function () {
     this.getInput("pins").setVisible(this.isSoftwareSerial);
     // Delete everything.
@@ -269,124 +230,54 @@ Blockly.Blocks["fsus_begin2"] = {
   },
 };
 
-Blockly.Blocks["fsus_wheel_stop"] = {
+// 舵机 ID [0] 是否在线
+Blockly.Blocks["fsus_ping"] = {
   init: function () {
     this.setColour(Blockly.Blocks.fsus.HUE);
-    this.appendDummyInput().appendField(Blockly.FSUS_SERVO);
-    this.appendValueInput("SERVO_ID")
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_SERVO);
+    this.appendValueInput("SERVO_ID", Number)
       .setCheck(Number)
-      .appendField("ID")
+      .appendField(Blockly.FSUS_ID)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput().appendField(Blockly.FSUS_STOP_ROTATE);
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_IS_ONLINE);
     this.setInputsInline(true);
+    this.setOutput(true);
   },
 };
 
-// 轮式模式 舵机 ID [0] 转速 [100] °/s 转向 [转向选择]
-Blockly.Blocks["fsus_wheel_run"] = {
+// ID [0] 角度 [angle] 转速 [100] 度/秒 [是否等待]
+Blockly.Blocks["fsus_set_angle"] = {
   init: function () {
     this.setColour(Blockly.Blocks.fsus.HUE);
-    this.appendDummyInput("").appendField(
-      Blockly.FSUS_WHEEL_MODE + " " + Blockly.FSUS_SERVO
-    );
-    this.appendValueInput("SERVO_ID")
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_SERVO);
+    this.appendValueInput("SERVO_ID", Number)
       .setCheck(Number)
-      .appendField("ID")
+      .appendField(Blockly.FSUS_ID)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendValueInput("SERVO_SPEED")
+    this.appendValueInput("SERVO_ANGLE", Number)
+      .setCheck(Number)
+      .appendField(Blockly.FSUS_DEGREE)
+      .setAlign(Blockly.ALIGN_RIGHT);
+    this.appendDummyInput("")
+      .appendField("°");
+    this.appendValueInput("SERVO_SPEED", Number)
       .setCheck(Number)
       .appendField(Blockly.FSUS_SPEED)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("").appendField(Blockly.FSUS_DEGREE_PER_SECOND);
-    this.appendDummyInput("").appendField(Blockly.FSUS_DIRECTION);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_DEGREE_PER_SECOND);
     this.appendDummyInput("")
       .setAlign(Blockly.ALIGN_RIGHT)
       .appendField(
         new Blockly.FieldDropdown([
-          [Blockly.FSUS_CW, "FSUS_CW"],
-          [Blockly.FSUS_CCW, "FSUS_CCW"],
+          [Blockly.FSUS_WAIT, "wait"],
+          [Blockly.FSUS_NO_WAIT, "no_wait"],
         ]),
-        "SERVO_ROTATE_DIRECTION"
+        "SERVO_WAIT"
       );
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setInputsInline(true);
-  },
-};
-
-// 轮式模式 舵机 ID [0] 转速 [100] °/s 转向 [转向选择] 时间 [1000] 毫秒
-Blockly.Blocks["fsus_wheel_run_time"] = {
-  init: function () {
-    this.setColour(Blockly.Blocks.fsus.HUE);
-    this.appendDummyInput("").appendField(
-      Blockly.FSUS_WHEEL_MODE + " " + Blockly.FSUS_SERVO
-    );
-    this.appendValueInput("SERVO_ID")
-      .setCheck(Number)
-      .appendField("ID")
-      .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendValueInput("SERVO_SPEED")
-      .setCheck(Number)
-      .appendField(Blockly.FSUS_SPEED)
-      .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("").appendField(Blockly.FSUS_DEGREE_PER_SECOND);
-    this.appendDummyInput("")
-      .appendField(Blockly.FSUS_DIRECTION)
-      .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("")
-      .setAlign(Blockly.ALIGN_RIGHT)
-      .appendField(
-        new Blockly.FieldDropdown([
-          [Blockly.FSUS_CW, "FSUS_CW"],
-          [Blockly.FSUS_CCW, "FSUS_CCW"],
-        ]),
-        "SERVO_ROTATE_DIRECTION"
-      );
-    this.appendValueInput("TIME_MS")
-      .setCheck(Number)
-      .appendField(Blockly.FSUS_TIME)
-      .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("").appendField(Blockly.FSUS_TIME_MS);
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setInputsInline(true);
-  },
-};
-
-// 轮式模式 舵机 ID [0] 转速 [100] °/s 转向 [转向选择] 圈数 [2]
-Blockly.Blocks["fsus_wheel_run_circle"] = {
-  init: function () {
-    this.setColour(Blockly.Blocks.fsus.HUE);
-    this.appendDummyInput("").appendField(
-      Blockly.FSUS_WHEEL_MODE + " " + Blockly.FSUS_SERVO
-    );
-    this.appendValueInput("SERVO_ID")
-      .setCheck(Number)
-      .appendField("ID")
-      .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendValueInput("SERVO_SPEED")
-      .setCheck(Number)
-      .appendField(Blockly.FSUS_SPEED)
-      .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("").appendField(Blockly.FSUS_DEGREE_PER_SECOND);
-    this.appendDummyInput("")
-      .appendField(Blockly.FSUS_DIRECTION)
-      .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("")
-      .setAlign(Blockly.ALIGN_RIGHT)
-      .appendField(
-        new Blockly.FieldDropdown([
-          [Blockly.FSUS_CW, "FSUS_CW"],
-          [Blockly.FSUS_CCW, "FSUS_CCW"],
-        ]),
-        "SERVO_ROTATE_DIRECTION"
-      );
-    this.appendValueInput("CIRCLE")
-      .setCheck(Number)
-      .appendField(Blockly.FSUS_CIRCLE_COUNT)
-      .setAlign(Blockly.ALIGN_RIGHT);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setInputsInline(true);
@@ -397,8 +288,11 @@ Blockly.Blocks["fsus_wheel_run_circle"] = {
 Blockly.Blocks["fsus_read_angle"] = {
   init: function () {
     this.setColour(Blockly.Blocks.fsus.HUE);
-    this.appendDummyInput("").appendField(Blockly.FSUS_SERVO);
-    this.appendValueInput("SERVO_ID").setCheck(Number).appendField("ID");
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_SERVO);
+    this.appendValueInput("SERVO_ID", Number)
+      .setCheck(Number)
+      .appendField(Blockly.FSUS_ID);
     this.appendDummyInput("")
       .appendField(Blockly.FSUS_READ)
       .setAlign(Blockly.ALIGN_RIGHT);
@@ -419,34 +313,129 @@ Blockly.Blocks["fsus_read_angle"] = {
   },
 };
 
-// ID [0] 角度 [angle] 转速 [100] 度/秒 [是否等待]
-Blockly.Blocks["fsus_set_angle"] = {
+// 舵机 ID [0] 停止转动
+Blockly.Blocks["fsus_wheel_stop"] = {
   init: function () {
     this.setColour(Blockly.Blocks.fsus.HUE);
-    this.appendDummyInput("").appendField(Blockly.FSUS_SERVO);
-    this.appendValueInput("SERVO_ID")
+    this.appendDummyInput()
+      .appendField(Blockly.FSUS_SERVO);
+    this.appendValueInput("SERVO_ID", Number)
       .setCheck(Number)
-      .appendField("ID")
+      .appendField(Blockly.FSUS_ID)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendValueInput("SERVO_ANGLE")
+    this.appendDummyInput()
+      .appendField(Blockly.FSUS_STOP_ROTATE);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setInputsInline(true);
+  },
+};
+
+// 轮式模式 舵机 ID [0] 转速 [100] °/s 转向 [转向选择]
+Blockly.Blocks["fsus_wheel_run"] = {
+  init: function () {
+    this.setColour(Blockly.Blocks.fsus.HUE);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_WHEEL_MODE + " " + Blockly.FSUS_SERVO);
+    this.appendValueInput("SERVO_ID", Number)
       .setCheck(Number)
-      .appendField(Blockly.FSUS_DEGREE)
+      .appendField(Blockly.FSUS_ID)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("").appendField("°");
-    this.appendValueInput("SERVO_SPEED")
+    this.appendValueInput("SERVO_SPEED", Number)
       .setCheck(Number)
       .appendField(Blockly.FSUS_SPEED)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("").appendField(Blockly.FSUS_DEGREE_PER_SECOND);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_DEGREE_PER_SECOND);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_DIRECTION);
     this.appendDummyInput("")
       .setAlign(Blockly.ALIGN_RIGHT)
       .appendField(
         new Blockly.FieldDropdown([
-          [Blockly.FSUS_WAIT, "wait"],
-          [Blockly.FSUS_NO_WAIT, "no_wait"],
+          [Blockly.FSUS_CW, "FSUS_CW"],
+          [Blockly.FSUS_CCW, "FSUS_CCW"],
         ]),
-        "SERVO_WAIT"
+        "SERVO_ROTATE_DIRECTION"
       );
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setInputsInline(true);
+  },
+};
+
+// 轮式模式 舵机 ID [0] 转速 [100] °/s 转向 [转向选择] 时间 [1000] 毫秒
+Blockly.Blocks["fsus_wheel_run_time"] = {
+  init: function () {
+    this.setColour(Blockly.Blocks.fsus.HUE);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_WHEEL_MODE + " " + Blockly.FSUS_SERVO);
+    this.appendValueInput("SERVO_ID", Number)
+      .setCheck(Number)
+      .appendField(Blockly.FSUS_ID)
+      .setAlign(Blockly.ALIGN_RIGHT);
+    this.appendValueInput("SERVO_SPEED", Number)
+      .setCheck(Number)
+      .appendField(Blockly.FSUS_SPEED)
+      .setAlign(Blockly.ALIGN_RIGHT);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_DEGREE_PER_SECOND);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_DIRECTION)
+      .setAlign(Blockly.ALIGN_RIGHT);
+    this.appendDummyInput("")
+      .setAlign(Blockly.ALIGN_RIGHT)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.FSUS_CW, "FSUS_CW"],
+          [Blockly.FSUS_CCW, "FSUS_CCW"],
+        ]),
+        "SERVO_ROTATE_DIRECTION"
+      );
+    this.appendValueInput("TIME_MS", Number)
+      .setCheck(Number)
+      .appendField(Blockly.FSUS_TIME)
+      .setAlign(Blockly.ALIGN_RIGHT);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_TIME_MS);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setInputsInline(true);
+  },
+};
+
+// 轮式模式 舵机 ID [0] 转速 [100] °/s 转向 [转向选择] 圈数 [2]
+Blockly.Blocks["fsus_wheel_run_circle"] = {
+  init: function () {
+    this.setColour(Blockly.Blocks.fsus.HUE);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_WHEEL_MODE + " " + Blockly.FSUS_SERVO);
+    this.appendValueInput("SERVO_ID", Number)
+      .setCheck(Number)
+      .appendField(Blockly.FSUS_ID)
+      .setAlign(Blockly.ALIGN_RIGHT);
+    this.appendValueInput("SERVO_SPEED", Number)
+      .setCheck(Number)
+      .appendField(Blockly.FSUS_SPEED)
+      .setAlign(Blockly.ALIGN_RIGHT);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_DEGREE_PER_SECOND);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_DIRECTION)
+      .setAlign(Blockly.ALIGN_RIGHT);
+    this.appendDummyInput("")
+      .setAlign(Blockly.ALIGN_RIGHT)
+      .appendField(
+        new Blockly.FieldDropdown([
+          [Blockly.FSUS_CW, "FSUS_CW"],
+          [Blockly.FSUS_CCW, "FSUS_CCW"],
+        ]),
+        "SERVO_ROTATE_DIRECTION"
+      );
+    this.appendValueInput("CIRCLE", Number)
+      .setCheck(Number)
+      .appendField(Blockly.FSUS_CIRCLE_COUNT)
+      .setAlign(Blockly.ALIGN_RIGHT);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setInputsInline(true);
@@ -457,22 +446,26 @@ Blockly.Blocks["fsus_set_angle"] = {
 Blockly.Blocks["fsus_set_angle_range"] = {
   init: function () {
     this.setColour(Blockly.Blocks.fsus.HUE);
-    this.appendDummyInput("").appendField(Blockly.FSUS_SERVO);
-    this.appendValueInput("SERVO_ID")
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_SERVO);
+    this.appendValueInput("SERVO_ID", Number)
       .setCheck(Number)
-      .appendField("ID")
+      .appendField(Blockly.FSUS_ID)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("").appendField(Blockly.FSUS_SET_ANGLE_RANGE);
-    this.appendValueInput("SERVO_ANGLE_MIN")
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_SET_ANGLE_RANGE);
+    this.appendValueInput("SERVO_ANGLE_MIN", Number)
       .setCheck(Number)
       .appendField(Blockly.FSUS_MIN)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("").appendField("°");
-    this.appendValueInput("SERVO_ANGLE_MAX")
+    this.appendDummyInput("")
+      .appendField("°");
+    this.appendValueInput("SERVO_ANGLE_MAX", Number)
       .setCheck(Number)
       .appendField(Blockly.FSUS_MAX)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("").appendField("°");
+    this.appendDummyInput("")
+      .appendField("°");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setInputsInline(true);
@@ -483,16 +476,18 @@ Blockly.Blocks["fsus_set_angle_range"] = {
 Blockly.Blocks["fsus_set_speed"] = {
   init: function () {
     this.setColour(Blockly.Blocks.fsus.HUE);
-    this.appendDummyInput("").appendField(Blockly.FSUS_SERVO);
-    this.appendValueInput("SERVO_ID")
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_SERVO);
+    this.appendValueInput("SERVO_ID", Number)
       .setCheck(Number)
-      .appendField("ID")
+      .appendField(Blockly.FSUS_ID)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendValueInput("SERVO_SPEED")
+    this.appendValueInput("SERVO_SPEED", Number)
       .setCheck(Number)
       .appendField(Blockly.FSUS_SET_SPEED)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("").appendField(Blockly.FSUS_DEGREE_PER_SECOND);
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_DEGREE_PER_SECOND);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setInputsInline(true);
@@ -503,10 +498,11 @@ Blockly.Blocks["fsus_set_speed"] = {
 Blockly.Blocks["fsus_set_torque"] = {
   init: function () {
     this.setColour(Blockly.Blocks.fsus.HUE);
-    this.appendDummyInput("").appendField(Blockly.FSUS_SERVO);
-    this.appendValueInput("SERVO_ID")
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_SERVO);
+    this.appendValueInput("SERVO_ID", Number)
       .setCheck(Number)
-      .appendField("ID")
+      .appendField(Blockly.FSUS_ID)
       .setAlign(Blockly.ALIGN_RIGHT);
     this.appendDummyInput("")
       .setAlign(Blockly.ALIGN_RIGHT)
@@ -523,37 +519,25 @@ Blockly.Blocks["fsus_set_torque"] = {
   },
 };
 
-// 舵机 ID [0]  设置阻尼 功率 [800] mW
+// 舵机 ID [0] 设置阻尼 功率 [800] mW
 Blockly.Blocks["fsus_set_damping"] = {
   init: function () {
     this.setColour(Blockly.Blocks.fsus.HUE);
-    this.appendDummyInput("").appendField(Blockly.FSUS_SERVO);
-    this.appendValueInput("SERVO_ID")
+    this.appendDummyInput("")
+      .appendField(Blockly.FSUS_SERVO);
+    this.appendValueInput("SERVO_ID", Number)
       .setCheck(Number)
-      .appendField("ID")
+      .appendField(Blockly.FSUS_ID)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendValueInput("SERVO_DAMPING")
+    this.appendValueInput("SERVO_DAMPING", Number)
       .setCheck(Number)
       .appendField(Blockly.FSUS_SET_DAMPING)
       .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("").appendField("mW");
+    this.appendDummyInput("")
+      .appendField("mW");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setInputsInline(true);
   },
 };
 
-// 舵机 ID [0] 是否在线
-Blockly.Blocks["fsus_ping"] = {
-  init: function () {
-    this.setColour(Blockly.Blocks.fsus.HUE);
-    this.appendDummyInput("").appendField(Blockly.FSUS_SERVO);
-    this.appendValueInput("SERVO_ID")
-      .setCheck(Number)
-      .appendField("ID")
-      .setAlign(Blockly.ALIGN_RIGHT);
-    this.appendDummyInput("").appendField(Blockly.FSUS_IS_ONLINE);
-    this.setInputsInline(true);
-    this.setOutput(true);
-  },
-};

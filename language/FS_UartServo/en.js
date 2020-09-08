@@ -26,6 +26,7 @@ Blockly.FSUS_TORQUE_CLOSE = "Torque Off";
 Blockly.FSUS_BEGIN = "Initialization";
 Blockly.FSUS_SERVO = "Servo";
 Blockly.FSUS_SERVOS = "Servo(s)";
+Blockly.FSUS_ID = "ID";
 Blockly.FSUS_COUNT = "Quantity";
 Blockly.FSUS_TOOLTIP_BEGIN = "Uart Servo Initializaition Module.";
 Blockly.FSUS_TOOLTIP_BEGIN2 = "Uart Servo Initializaition Module.";

@@ -26,6 +26,7 @@ Blockly.FSUS_TORQUE_CLOSE = "關閉扭力";
 Blockly.FSUS_BEGIN = "初始化";
 Blockly.FSUS_SERVO = "舵機";
 Blockly.FSUS_SERVOS = "舵機";
+Blockly.FSUS_ID = "ID";
 Blockly.FSUS_COUNT = "數量";
 Blockly.FSUS_TOOLTIP_BEGIN = "串行總線舵機初始化模塊，適用於舵機編號是從0開始並且連號的情況。";
 Blockly.FSUS_TOOLTIP_BEGIN2 = "串行總線舵機初始化模塊，適用於舵機編號不是連號的情況。";
